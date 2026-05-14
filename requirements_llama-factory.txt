@@ -1,0 +1,6 @@
+torch==2.9.0
+llamafactory==0.9.5
+deepspeed==0.18.9
+flash_attn==2.8.3
+datasets==4.0.0
+wandb==0.26.1

@@ -1,0 +1,49 @@
+### model
+model_name_or_path: Your model path
+trust_remote_code: true
+
+### method
+stage: dpo
+do_train: true
+finetuning_type: lora
+lora_rank: 64
+lora_alpha: 128
+lora_dropout: 0.1 
+lora_target: all
+pref_beta: 0.2
+pref_ftx: 0.1
+pref_loss: sigmoid
+disable_shuffling: false
+
+### dataset
+dataset: legal_dpo_task 
+template: qwen3 
+cutoff_len: 4096
+preprocessing_num_workers: 16
+dataloader_num_workers: 4
+
+### output
+output_dir: Your output directory
+logging_steps: 5
+save_steps: 15
+plot_loss: true
+overwrite_output_dir: true
+save_only_model: false
+report_to: wandb 
+
+### train
+per_device_train_batch_size: 4 
+gradient_accumulation_steps: 1 
+learning_rate: 2e-6
+num_train_epochs: 1
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+flash_attn: fa2 
+deepspeed: deepspeed/ds_z2_config.json
+
+### eval
+val_size: 0.1
+per_device_eval_batch_size: 1
+eval_strategy: steps
+eval_steps: 15
