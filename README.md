@@ -1,4 +1,5 @@
 # ⚖️ Legal-RFT：Enhancing Legal LLMs' Reasoning Capabilities through Reinforcement Fine-tuning
+<img width="1024" height="514" alt="image" src="https://github.com/user-attachments/assets/f4b5ab13-3603-41a5-8d60-6e0dbc1d409c" />
 
 本项目为“大学生创新训练计划”项目的官方代码仓库。针对法律裁判预测（Legal Judgment Prediction, LJP）任务中存在的定性定量任务耦合、长文本检索注意力分散以及量刑逻辑一致性不足等挑战，本项目提出了一种**低资源多模型协同推理框架**。
 
