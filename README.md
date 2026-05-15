@@ -1,9 +1,9 @@
 # ⚖️ Legal-RFT：Enhancing Legal LLMs' Reasoning Capabilities through Reinforcement Fine-tuning
 <img width="1024" height="514" alt="image" src="https://github.com/user-attachments/assets/f4b5ab13-3603-41a5-8d60-6e0dbc1d409c" />
 
-本项目为“大学生创新训练计划”项目的官方代码仓库。针对法律裁判预测（Legal Judgment Prediction, LJP）任务中存在的定性定量任务耦合、长文本检索注意力分散以及量刑逻辑一致性不足等挑战，本项目提出了一种**低资源多模型协同推理框架**。
+本项目为中国科学技术大学“大学生创新训练计划”项目 “基于强化微调的法律大模型推理能力提升研究” 的官方代码仓库。针对法律裁判预测（Legal Judgment Prediction, LJP）任务中存在的高质量推理数据稀缺、定性定量任务耦合、长文本注意力分散以及量刑推理可解释性不足等挑战，本项目提出了一种**低资源多模型协同推理框架**。
 
-该框架整合了**自动化数据合成**、**定性-定量级联检索增强（RAG）架构**，并创新性地针对分类（法条预测）和回归（量刑预测）任务分别引入了 **DPO偏好对齐** 与 **DAPO强化微调**，显著提升了法律大模型在复杂案情下的推理准确性与规范性。
+该框架整合了**自动化数据合成**与**基于检索增强的定性-定量级联架构**，并创新性地在冷启动微调（SFT）基础上，针对定性分类任务（法条预测）和定量回归任务（量刑预测）分别引入了 **DPO偏好对齐** 与 **DAPO强化微调**，显著提升了法律大模型在复杂案情下的推理准确性与规范性。
 
 ---
 
@@ -20,7 +20,7 @@ Legal-RFT/
 ├── training/              # 模型训练代码
 │   ├── sft_stage/         # 法条与量刑 SFT (基于 TRL)
 │   ├── dpo_stage/         # 法条 DPO (基于 LLaMA-Factory)
-│   └── dapo_stage/          # 量刑 DAPO (基于 TRL + vLLM, 包含自定义奖励函数)
+│   └── dapo_stage/        # 量刑 DAPO (基于 TRL + vLLM, 包含自定义奖励函数)
 └── evaluation/            # 端到端级联推理与评估脚本
 ```
 
@@ -44,7 +44,7 @@ pip install -r requirements_llama-factory.txt
 参考 `data_pipeline/` 目录下的 Markdown 提示词文件，使用教师模型（如 DeepSeek）进行数据合成。合成后的数据按照 `data/example_dataset/` 中的 JSONL 格式存放。
 
 ### 2. 模型训练
-硬件要求声明： 本项目基于中科大瀚海22超级计算系统 SLURM 调度系统实现，实验中使用了 8卡 NVIDIA A100-SXM4-80GB GPU。
+硬件要求声明： 本项目基于中科大瀚海22超级计算系统 SLURM 作业调度系统实现，实验中使用了 8卡 NVIDIA A100-SXM4-80GB GPU。
 依次执行以下脚本，执行模型训练：
 ```bash
 cd training
@@ -62,8 +62,12 @@ sbatch dapo_stage/dapo_penalty.sh
 进入 `evaluation/` 目录，进行性能评估：
 ```bash
 cd evaluation
-python fact_law_mapping.py   # RAG 检索 Top-5 候选法条
-python eval_article.py       # 定性任务评估 (法条与罪名)
-python eval_penalty_tool.py  # 定量任务评估 (刑期推演)
+
+# RAG 检索 Top-5 候选法条
+python fact_law_mapping.py
+# 法条任务评估
+python eval_article.py
+# 刑期任务评估
+python eval_penalty.py
 ```
 ---
